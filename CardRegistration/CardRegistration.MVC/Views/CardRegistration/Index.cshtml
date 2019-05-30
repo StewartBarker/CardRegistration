@@ -31,26 +31,13 @@
         </div>
     </div>
 
-    @*<div class="form-group">
-        @Html.LabelFor(model => model.ExpiryDateMonth, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ExpiryDateMonth, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ExpiryDateMonth, "", new { @class = "text-danger" })
-        </div>
-    </div>*@
-
     <div class="form-group">
-        @Html.LabelFor(model => model.ExpiryDateMonth, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.ExpiryDateMonthAndYear, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-5">
-            @Html.DropDownListFor(model => model.ExpiryDateMonth, new SelectList(Model.ExpiryMonths, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
+            @Html.DropDownListFor(model => model.ExpiryDateMonth, new SelectList(Model.Months, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
             @Html.ValidationMessageFor(model => model.ExpiryDateMonth, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ExpiryDateYear, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ExpiryDateYear, new { htmlAttributes = new { @class = "form-control" } })
+            /
+            @Html.DropDownListFor(model => model.ExpiryDateYear, new SelectList(Model.Years, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
             @Html.ValidationMessageFor(model => model.ExpiryDateYear, "", new { @class = "text-danger" })
         </div>
     </div>

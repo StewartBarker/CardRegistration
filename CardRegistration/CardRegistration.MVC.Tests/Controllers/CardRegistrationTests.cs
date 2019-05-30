@@ -15,7 +15,14 @@ namespace CardRegistration.MVC.Tests.Controllers
         public void MonthsDropDownDisplaysCorrectMonths()
         {           
             CardRegistrationViewModel vm = new CardRegistrationViewModel();
-            var months = vm.ExpiryMonths;
+            var months = vm.Months;
+        }
+
+        [TestMethod]
+        public void YearsDropDownDisplaysCorrectYears()
+        {
+            CardRegistrationViewModel vm = new CardRegistrationViewModel();
+            var years = vm.Years;
         }
 
     }

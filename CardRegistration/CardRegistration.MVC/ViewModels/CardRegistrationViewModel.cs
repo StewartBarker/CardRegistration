@@ -47,7 +47,7 @@ namespace CardRegistration.MVC.ViewModels
 
         [Display(Name="Expiry Date")]
         [Remote("ExpiryDateIsValid", "CardRegistration", HttpMethod = "POST", ErrorMessage = "Please enter a valid Expiry Date")]
-        public string ExpiryDateMonthAndYear { get; set; }
+        public DateTime ExpiryDateMonthAndYear { get; set; }
         [Display(Name="Address Line 1")]
         [Required]
         public string AddressLine1 { get; set; }

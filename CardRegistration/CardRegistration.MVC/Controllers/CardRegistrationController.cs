@@ -24,14 +24,13 @@ namespace CardRegistration.MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUpdateData(CardRegistrationViewModel vm)
+        public ActionResult IsModelStateValidAjax(CardRegistrationViewModel vm)
         {
-            //return Json(new { Success = true });
             if (!ModelState.IsValid)
             {
-                return Json(new { success = false, errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList() }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false}, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { success = true, errors = "" }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -43,9 +42,21 @@ namespace CardRegistration.MVC.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExpiryDateIsValid(string month, string year)
+        public JsonResult ExpiryDateIsValid(DateTime ExpiryDateMonthAndYear)
         {
-            return Json(true);
+            try
+            {
+                var validExpiryDate = Convert.ToDateTime(ExpiryDateMonthAndYear);
+                if (validExpiryDate <= DateTime.Today || (validExpiryDate.Year - DateTime.Today.Year > 20))
+                {
+                    return Json(false);
+                }
+                return Json(true);
+            }
+            catch(Exception ex)
+            {
+                return Json(false);
+            }
         }
     }
 }

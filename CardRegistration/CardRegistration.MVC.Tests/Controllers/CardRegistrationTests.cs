@@ -16,6 +16,7 @@ namespace CardRegistration.MVC.Tests.Controllers
         {           
             CardRegistrationViewModel vm = new CardRegistrationViewModel();
             var months = vm.Months;
+            Assert.AreEqual(12, vm.Months.Count());
         }
 
         [TestMethod]

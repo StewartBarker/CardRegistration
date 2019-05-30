@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Card Registration</h2>
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "cardRegistrationForm" })) 
@@ -33,12 +33,21 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.ExpiryDateMonthAndYear, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DropDownListFor(model => model.ExpiryDateMonth, new SelectList(Model.Months, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
-            @Html.ValidationMessageFor(model => model.ExpiryDateMonth, "", new { @class = "text-danger" })
-            /
-            @Html.DropDownListFor(model => model.ExpiryDateYear, new SelectList(Model.Years, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
-            @Html.ValidationMessageFor(model => model.ExpiryDateYear, "", new { @class = "text-danger" })
+        <div class="row col-md-7">
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ExpiryDateMonth, new SelectList(Model.Months, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Months" })
+            </div>
+            <div class="col-md-1 control-label">/</div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ExpiryDateYear, new SelectList(Model.Years, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Years" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">        
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.ExpiryDateMonthAndYear, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ExpiryDateMonthAndYear, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -68,63 +77,69 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" id="btnTestValidate" onclick="btnTestValidateClick()" class="btn btn-default">validate</button>
+            <button type="button" id="btnTestValidate" onclick="ValidateCheck()" class="btn btn-default">validate</button>
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Confirm" class="btn btn-default" disabled="disabled" id="btnConfirm" />
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-    $(document).ready(function () {
-        console.log('on ready');        
+        $.validator.setDefaults({
+            ignore: ""
+        });
+            $('#Months').change(function () {
+                updateMonthAndYear();
+            });
+
+    $('#Years').change(function () {
+        updateMonthAndYear();
     });
 
-    function btnTestValidateClick() {
+    function updateMonthAndYear() {
+        console.log($('#Months').val());
+        var month = $('#Months').val();
+        var formattedMonth = ("0" + month).slice(-2);
+        console.log(formattedMonth);
+        var year = $('#Years').val();
+        //var asDate = new Date(year + "-" + month + "-01");
+        //console.log(asDate);
+        $('#ExpiryDateMonthAndYear').val("01/"+month+"/"+year+" 00:00:00");
+        console.log('Month and year: ' + $('#ExpiryDateMonthAndYear').val());
+        $('form').data('validator').element('#ExpiryDateMonthAndYear'); // trigger validation on hidden item whenever month/year changes
+        //$('#ExpiryDateMonthAndYear').val()
+    }           
+
+
+    function ValidateCheck() {
         console.log('test');
         var form = $('#cardRegistrationForm');
         $.ajax({
             cache: false,
             async: true,
             type: "POST",
-            url: "@Url.Action("AddUpdateData", "CardRegistration")",
+            url: "@Url.Action("IsModelStateValidAjax", "CardRegistration")",
             data:  form.serialize(),
             success: function (data) {
                 var isSuccessful = (data['success']);
                 if (isSuccessful) {
-                    console.log(data['view']);
-                    initializePage();
+                    console.log('success');
+                    $('#btnConfirm').removeAttr('disabled');
+                    //initializePage();
                 }
                 else {
-                    var errors = data['errors'];
-                    displayValidationErrors(errors);
+                    $('#btnConfirm').attr('disabled', true);
                 }
             }
         });
-    }            
-
-    function displayValidationErrors(errors)
-    {
-        console.log('in displayValidationErrors');
-        var $ul = $('div.validation-summary-valid.text-danger > ul');
-
-        $ul.empty();
-        $.each(errors, function (idx, errorMessage) {
-            console.log('error message: ' + errorMessage);
-            $ul.append('<li>' + errorMessage + '</li>');
-        });
-    }
+    } 
     </script>
 }

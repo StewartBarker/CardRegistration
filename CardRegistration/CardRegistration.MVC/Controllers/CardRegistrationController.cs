@@ -14,12 +14,19 @@ namespace CardRegistration.MVC.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            ViewBag.Success = false;
             return View(new CardRegistrationViewModel());
         }
 
         [HttpPost]
         public ActionResult Index(CardRegistrationViewModel vm)
-        {   
+        {
+            ViewBag.Success = false;
+            if (ModelState.IsValid)
+            {
+                ViewBag.Success = true;
+                ViewBag.CardNumberPrivate = $"**** **** **** {vm.CardNumber.Substring(vm.CardNumber.Length - 4, 4)}";                
+            }
             return View(vm);           
         }
 
@@ -46,7 +53,7 @@ namespace CardRegistration.MVC.Controllers
         {
             try
             {
-                var validExpiryDate = Convert.ToDateTime(ExpiryDateMonthAndYear);
+                    var validExpiryDate = Convert.ToDateTime(ExpiryDateMonthAndYear);
                 if (validExpiryDate <= DateTime.Today || (validExpiryDate.Year - DateTime.Today.Year > 20))
                 {
                     return Json(false);

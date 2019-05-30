@@ -6,13 +6,12 @@
 
 <h2>Card Registration</h2>
 
-
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "cardRegistrationForm" })) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>CardRegistrationViewModel</h4>
+
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -41,10 +40,10 @@
             <div class="col-md-3">
                 @Html.DropDownListFor(model => model.ExpiryDateYear, new SelectList(Model.Years, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Years" })
             </div>
-        </div>        
+        </div>
     </div>
 
-    <div class="form-group">        
+    <div class="form-group">
         <div class="col-md-10">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -78,15 +77,28 @@
         </div>
     </div>
 
-    @*<div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="button" id="btnTestValidate" onclick="ValidateCheck()" class="btn btn-default">validate</button>
-        </div>
-    </div>*@
-
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Confirm" class="btn btn-default" disabled="disabled" id="btnConfirm" />
+        </div>
+    </div>
+
+    <div id="popup" class="modal fade" role="dialog" hidden="hidden">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">The card has been successfuly registered!</h4>
+                </div>
+                <div class="modal-body">
+                    <div>Card Number: <b>@ViewBag.CardNumberPrivate</b></div>
+                    <div>Expiry Date: <b>@Model.ExpiryDateMonth / @Model.ExpiryDateYear</b></div>
+                    <div>Address Line 1: <b>@Model.AddressLine1</b></div>
+                    <div>Post Code: <b>@Model.PostCode</b></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="modalOk" data-dismiss="modal" onclick="modalOnClick()">Ok</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -139,25 +151,39 @@
             ValidateCheck();
         });        
 
-    function ValidateCheck() {        
-        var form = $('#cardRegistrationForm');
-        $.ajax({
-            cache: false,
-            async: true,
-            type: "POST",
-            url: "@Url.Action("IsModelStateValidAjax", "CardRegistration")",
-            data:  form.serialize(),
-            success: function (data) {
-                var isSuccessful = (data['success']);
-                if (isSuccessful) {
-                    console.log('success');
-                    $('#btnConfirm').removeAttr('disabled');
+        function ValidateCheck() {        
+            var form = $('#cardRegistrationForm');
+            $.ajax({
+                cache: false,
+                async: true,
+                type: "POST",
+                url: "@Url.Action("IsModelStateValidAjax", "CardRegistration")",
+                data:  form.serialize(),
+                success: function (data) {
+                    var isSuccessful = (data['success']);
+                    if (isSuccessful) {
+                        console.log('success');
+                        $('#btnConfirm').removeAttr('disabled');
+                    }
+                    else {
+                        $('#btnConfirm').attr('disabled', true);
+                    }
                 }
-                else {
-                    $('#btnConfirm').attr('disabled', true);
+            });            
+        } 
+
+    function modalOnClick() {
+        $('#popup').modal('hide');
+        window.location.href = '@Url.Action("Index", "CardRegistration")';
+    }
+
+        $(document).ready(function () {            
+            if ("@ViewBag.Success"=="True") {
+                $('#popup').modal('show');
                 }
-            }
+            else {
+                   $('#popup').modal('hide');
+                }
         });
-    } 
     </script>
 }

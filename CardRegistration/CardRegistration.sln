@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardRegistration.MVC", "Car
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardRegistration.MVC.Tests", "CardRegistration.MVC.Tests\CardRegistration.MVC.Tests.csproj", "{DDA87711-9B25-41A8-B42E-C285222CD802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardRegistration.Models", "CardRegistration.Models\CardRegistration.Models.csproj", "{C791E065-0C72-4C7D-86AC-7B3FAC003CE4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{DDA87711-9B25-41A8-B42E-C285222CD802}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA87711-9B25-41A8-B42E-C285222CD802}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA87711-9B25-41A8-B42E-C285222CD802}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C791E065-0C72-4C7D-86AC-7B3FAC003CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C791E065-0C72-4C7D-86AC-7B3FAC003CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C791E065-0C72-4C7D-86AC-7B3FAC003CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C791E065-0C72-4C7D-86AC-7B3FAC003CE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -41,13 +41,16 @@
             <div class="col-md-3">
                 @Html.DropDownListFor(model => model.ExpiryDateYear, new SelectList(Model.Years, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Years" })
             </div>
-        </div>
+        </div>        
     </div>
 
     <div class="form-group">        
         <div class="col-md-10">
-            @Html.HiddenFor(model => model.ExpiryDateMonthAndYear, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ExpiryDateMonthAndYear, "", new { @class = "text-danger" })
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                @Html.HiddenFor(model => model.ExpiryDateMonthAndYear, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ExpiryDateMonthAndYear, "", new { @class = "text-danger" })
+            </div>
         </div>
     </div>
 
@@ -75,11 +78,11 @@
         </div>
     </div>
 
-    <div class="form-group">
+    @*<div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="button" id="btnTestValidate" onclick="ValidateCheck()" class="btn btn-default">validate</button>
         </div>
-    </div>
+    </div>*@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -93,34 +96,50 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
+        // Allow validation of hidden field..
         $.validator.setDefaults({
             ignore: ""
         });
-            $('#Months').change(function () {
-                updateMonthAndYear();
-            });
+        $('#Months').change(function () {
+            updateMonthAndYear();
+        });
 
-    $('#Years').change(function () {
-        updateMonthAndYear();
-    });
+        $('#Years').change(function () {
+            updateMonthAndYear();
+        });
 
-    function updateMonthAndYear() {
-        console.log($('#Months').val());
-        var month = $('#Months').val();
-        var formattedMonth = ("0" + month).slice(-2);
-        console.log(formattedMonth);
-        var year = $('#Years').val();
-        //var asDate = new Date(year + "-" + month + "-01");
-        //console.log(asDate);
-        $('#ExpiryDateMonthAndYear').val("01/"+month+"/"+year+" 00:00:00");
-        console.log('Month and year: ' + $('#ExpiryDateMonthAndYear').val());
-        $('form').data('validator').element('#ExpiryDateMonthAndYear'); // trigger validation on hidden item whenever month/year changes
-        //$('#ExpiryDateMonthAndYear').val()
-    }           
+        function updateMonthAndYear() {
+            console.log($('#Months').val());
+            var month = $('#Months').val();
+            var formattedMonth = ("0" + month).slice(-2);
+            console.log(formattedMonth);
+            var year = $('#Years').val();
+            $('#ExpiryDateMonthAndYear').val("01/" + month + "/" + year + " 00:00:00");
+            console.log('Month and year: ' + $('#ExpiryDateMonthAndYear').val());
+            $('form').data('validator').element('#ExpiryDateMonthAndYear'); // trigger validation on hidden item whenever month/year changes           
+        }
 
+        // perform validation check (to enable/disable Confirm button at each field change)
+        $('#CardNumber').change(function () {
+            ValidateCheck();
+        });
+        $('#Name').change(function () {
+            ValidateCheck();
+        });
+        $('#Months').change(function () {
+            ValidateCheck();
+         });
+        $('#Years').change(function () {
+            ValidateCheck();
+        });
+        $('#AddressLine1').change(function () {
+            ValidateCheck();
+        });
+        $('#PostCode').change(function () {
+            ValidateCheck();
+        });        
 
-    function ValidateCheck() {
-        console.log('test');
+    function ValidateCheck() {        
         var form = $('#cardRegistrationForm');
         $.ajax({
             cache: false,
@@ -133,7 +152,6 @@
                 if (isSuccessful) {
                     console.log('success');
                     $('#btnConfirm').removeAttr('disabled');
-                    //initializePage();
                 }
                 else {
                     $('#btnConfirm').attr('disabled', true);

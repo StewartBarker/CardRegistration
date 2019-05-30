@@ -1,10 +1,7 @@
-﻿using CardRegistration.MVC.Attribute;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CardRegistration.MVC.ViewModels
@@ -17,22 +14,16 @@ namespace CardRegistration.MVC.ViewModels
         [RegularExpression("^[0-9]*$", ErrorMessage = "Card number must contains only numbers")]
         [Remote("CardPassesLuhnCheck", "CardRegistration", HttpMethod = "POST", ErrorMessage = "Please enter a valid Card Number")]
         public string CardNumber { get; set; }
+
         [Required]
         public string Name { get; set; }
+
         public string ExpiryDateMonth { get; set; }
         public IEnumerable<SelectListItem> Months
         {
             get
             {      
                 return Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString("00") });
-                //return DateTimeFormatInfo
-                //       .InvariantInfo
-                //       .MonthNames
-                //       .Select((monthName, index) => new SelectListItem
-                //       {
-                //           Value = (index + 1).ToString(),
-                //           Text = (index).ToString("00")
-                //       });
             }
         }
         
@@ -48,10 +39,13 @@ namespace CardRegistration.MVC.ViewModels
         [Display(Name="Expiry Date")]
         [Remote("ExpiryDateIsValid", "CardRegistration", HttpMethod = "POST", ErrorMessage = "Please enter a valid Expiry Date")]
         public DateTime ExpiryDateMonthAndYear { get; set; }
+
         [Display(Name="Address Line 1")]
         [Required]
         public string AddressLine1 { get; set; }
+
         public string Town { get; set; }
+
         [Display(Name="Post Code")]
         [Required]
         public string PostCode { get; set; }       

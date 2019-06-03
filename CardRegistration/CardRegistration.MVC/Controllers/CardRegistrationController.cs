@@ -18,18 +18,31 @@ namespace CardRegistration.MVC.Controllers
             return View(new CardRegistrationViewModel());
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Index(CardRegistrationViewModel vm)
         {
             ViewBag.Success = false;
+            CardRegistrationViewModel vmWithHiddenCardNumber = vm;
             if (ModelState.IsValid)
             {
                 ViewBag.Success = true;
-                ViewBag.CardNumberPrivate = $"**** **** **** {vm.CardNumber.Substring(vm.CardNumber.Length - 4, 4)}";                
-            }
-            return View(vm);           
+                vmWithHiddenCardNumber = new CardRegistrationViewModel
+                {
+                    Name = vm.Name,
+                    CardNumber = $"**** **** **** {vm.CardNumber.Substring(vm.CardNumber.Length - 4, 4)}",
+                    ExpiryDateMonthAndYear = vm.ExpiryDateMonthAndYear,
+                    ExpiryDateMonth = vm.ExpiryDateMonth,
+                    ExpiryDateYear = vm.ExpiryDateYear,
+                    AddressLine1 = vm.AddressLine1,
+                    Town = vm.Town,
+                    PostCode = vm.PostCode
+                };                 
+            }            
+            return View(vmWithHiddenCardNumber);           
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult IsModelStateValidAjax(CardRegistrationViewModel vm)
         {
@@ -39,7 +52,7 @@ namespace CardRegistration.MVC.Controllers
             }
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
-
+                
         [HttpPost]
         public JsonResult CardPassesLuhnCheck(string CardNumber)
         {
@@ -47,7 +60,7 @@ namespace CardRegistration.MVC.Controllers
             var result = cardValidationService.PassesLuhnTest();
             return Json(result);
         }
-
+                
         [HttpPost]
         public JsonResult ExpiryDateIsValid(DateTime ExpiryDateMonthAndYear)
         {

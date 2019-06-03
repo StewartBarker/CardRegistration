@@ -90,7 +90,7 @@
                     <h4 class="modal-title">The card has been successfuly registered!</h4>
                 </div>
                 <div class="modal-body">
-                    <div>Card Number: <b>@ViewBag.CardNumberPrivate</b></div>
+                    <div>Card Number: <b>@Model.CardNumber</b></div>
                     <div>Expiry Date: <b>@Model.ExpiryDateMonth / @Model.ExpiryDateYear</b></div>
                     <div>Address Line 1: <b>@Model.AddressLine1</b></div>
                     <div>Post Code: <b>@Model.PostCode</b></div>
@@ -178,7 +178,8 @@
     }
 
         $(document).ready(function () {            
-            if ("@ViewBag.Success"=="True") {
+            if ("@ViewBag.Success" == "True") {          
+                $('#CardNumber').val('@Model.CardNumber');
                 $('#popup').modal('show');
                 }
             else {
